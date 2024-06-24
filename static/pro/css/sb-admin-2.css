@@ -166,7 +166,8 @@ a {
 
 a:hover {
   color: #224abe;
-  text-decoration: underline;
+  /* text-decoration: underline; */
+  text-decoration: none;
 }
 
 a:not([href]):not([class]) {
@@ -11278,4 +11279,9 @@ footer.sticky-footer .copyright {
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
+}
+
+.zz-bg-files {
+  color: red;
+  background-color: black;
 }

@@ -13,9 +13,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # routers
 app.include_router(products.router)
 
+usuarios = [{"name": "jose", "info": "some shit parks"},
+            {"name": "fede", "info": "some fede shit"},
+            {"name": "paula", "info": "some paula shit"}
+            ]
+
 @app.get("/")
 async def index(request: Request):
-    return templates.TemplateResponse("task/index.html", context={"request": request})
+    return templates.TemplateResponse("task/index.html", context={"request": request, "usuarios": usuarios})
 
 
 @app.get("/app")
@@ -26,4 +31,15 @@ async def appme(request: Request):
 
 @app.get("/health")
 async def health():
-    return {"ping": "pong"}
+    return {"ping": 200}
+
+@app.post("/trigger_function")
+def trigger_function(request: Request):
+  # Call your function here
+    result = clever_function()
+    return templates.TemplateResponse("task/index.html", context={"request": request, "result": result, "usuarios": usuarios})
+  
+def clever_function():
+    print("i did something")
+
+templates.env.globals.update(clever_function=clever_function)
