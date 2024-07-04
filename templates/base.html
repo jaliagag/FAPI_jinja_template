@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', path='pro/css/sb-admin-2.css') }}" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.min.js"></script>
     <title> 🚧 Main </title>
 </head>
 <body id="page-top">
@@ -345,16 +346,10 @@
                 <div class="container-fluid" id="baseindex">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Panel de control</h1>
-                        <form method="post" action="/trigger_function">
-                            <input type="hidden" name="action" value="trigger_function">
-                            <button type="submit" style="none">
 
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                            <i class="fas fa-download fa-sm text-white-50">
-                            </i> 🚧 Refrescar informacion 🚧
-                        </a>
-                            </button>
-                          </form>
+                        <p id="time-display"></p>
+                        <button id="get-time-button">Get Current Time</button>
+
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                             <i class="fas fa-download fa-sm text-white-50">
                             </i> 🚧 Refrescar informacion 🚧
@@ -419,6 +414,25 @@
                 x.style.display = "none";
             }
           } 
+
+        // Function to update the displayed time
+        function updateTime(timeValue) {
+            document.getElementById("time-display").textContent = timeValue;
+        }
+        
+        // Button click event listener
+        document.getElementById("get-time-button").addEventListener("click", async function() {
+            try {
+                // Make a GET request to the FastAPI endpoint using Axios (or Fetch API)
+                const response = await axios.get("/timer/");  // Replace with your actual endpoint URL
+        
+                // Update the frontend with the response's "value"
+                updateTime(response.data.value);
+            } catch (error) {
+                console.error("Error fetching time:", error);
+                // Handle errors appropriately, e.g., display an error message to the user
+            }
+        });
     </script>
 
     <!-- Bootstrap core JavaScript-->

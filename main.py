@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import products
+from routers import products, timer
 
 templates = Jinja2Templates(directory="templates/")
 
@@ -12,6 +12,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # routers
 app.include_router(products.router)
+app.include_router(timer.router)
 
 usuarios = [{"name": "jose", "info": "some shit parks"},
             {"name": "fede", "info": "some fede shit"},
@@ -32,14 +33,3 @@ async def appme(request: Request):
 @app.get("/health")
 async def health():
     return {"ping": 200}
-
-@app.post("/trigger_function")
-def trigger_function(request: Request):
-  # Call your function here
-    result = clever_function()
-    return templates.TemplateResponse("task/index.html", context={"request": request, "result": result, "usuarios": usuarios})
-  
-def clever_function():
-    print("i did something")
-
-templates.env.globals.update(clever_function=clever_function)
