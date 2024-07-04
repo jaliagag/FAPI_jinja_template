@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import products, timer
+from routers import products, timer, usuarios
 
 templates = Jinja2Templates(directory="templates/")
 
@@ -13,6 +13,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # routers
 app.include_router(products.router)
 app.include_router(timer.router)
+app.include_router(usuarios.router)
 
 usuarios = [{"name": "jose", "info": "some shit parks"},
             {"name": "fede", "info": "some fede shit"},
