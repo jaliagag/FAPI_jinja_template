@@ -348,7 +348,6 @@
                         <h1 class="h3 mb-0 text-gray-800">Panel de control</h1>
 
                         <!--<p id="time-display"></p>-->
-                        <p id="users-display"></p>
 
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="get-users-link">
                             <i class="fas fa-download fa-sm text-white-50">
@@ -360,6 +359,8 @@
                     </div>
                     {% block baseindex %}
                     {% endblock %}
+
+                    <p id="users-display"></p>
                 </div>
 
             </div>
@@ -422,38 +423,21 @@
         // }
 
         // Function to update user list
-        function updateUsers(usuariosValue) {
-            document.getElementById("users-display").textContent = usuariosValue;
-        }
-        
-        // Button click event listener
-//        document.getElementById("get-time-button").addEventListener("click", async function() {
-//            try {
-//                // Make a GET request to the FastAPI endpoint using Axios (or Fetch API)
-//                const response = await axios.get("/timer/");  // Replace with your actual endpoint URL
-//        
-//                // Update the frontend with the response's "value"
-//                updateTime(response.data.value);
-//
-//                // Disable the link (visual cue with class)
-//                this.classList.add("disabled");
-//
-//                // Enable the link after 30 seconds
-//                setTimeout(() => {
-//                    this.classList.remove("disabled");
-//                }, 30000); // 30 seconds in milliseconds
-//
-//                // Disable the button for 30 seconds
-//                // this.disabled = true;
-//                // setTimeout(() => {
-//                //     this.disabled = false;
-//                // }, 30000); // 30 seconds in milliseconds
-//            } catch (error) {
-//                console.error("Error fetching time:", error);
-//                // Handle errors appropriately, e.g., display an error message to the user
-//            }
-//        });
+        // function updateUsers(usuariosValue) {
+        //     for (var i = 0; i < usuariosValue.length; i++ ){
+        //         console.log(usuariosValue[i].name)
+        //         console.log(usuariosValue[i].info)
+        //     }
 
+        //     // Build a Text
+        //     // let text = "";
+        //     // for (let x in usuariosValue) {
+        //     //   text += usuariosValue[x].name + " " + usuariosValue[x].info + " ";
+        //     // };
+        //     //document.getElementById("users-display").textContent = usuariosValue;
+        //     //document.getElementById("users-display").innerHTML = text;
+        // }
+        
         // Button click event listener
         document.getElementById("get-users-link").addEventListener("click", async function() {
             try {
@@ -461,7 +445,8 @@
                 const response = await axios.get("/usuarios");  // Replace with your actual endpoint URL
         
                 // Update the frontend with the response's "value"
-                updateUsers(response.data.value);
+                //updateUsers(response.data.value);
+                //updateUsers(response.data); //debug
 
                 // Disable the link (visual cue with class)
                 this.classList.add("disabled");
@@ -469,13 +454,10 @@
                 // Enable the link after 30 seconds
                 setTimeout(() => {
                     this.classList.remove("disabled");
-                }, 30000); // 30 seconds in milliseconds
+                    window.location.reload();
+                //}, 30000); // 30 seconds in milliseconds
+                }, 4000); // 30 seconds in milliseconds
 
-                // Disable the button for 30 seconds
-                // this.disabled = true;
-                // setTimeout(() => {
-                //     this.disabled = false;
-                // }, 30000); // 30 seconds in milliseconds
             } catch (error) {
                 console.error("Error fetching time:", error);
                 // Handle errors appropriately, e.g., display an error message to the user
