@@ -32,3 +32,8 @@ async def update_users(user: Usuario):
     update_user_encoded = jsonable_encoder(user)
     usuarios.append(update_user_encoded)
     return update_user_encoded
+
+@router.delete("/{id}")
+async def delete_user(id: str):
+    del usuarios[int(id)]
+    return "user deleted"
