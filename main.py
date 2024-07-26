@@ -1,42 +1,63 @@
-from fastapi import FastAPI
-from fastapi import Request
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from routers import products, timer, usuarios
-from routers.usuarios import get_users
+from github import Github
+from os import environ
+from datetime import datetime
 
-templates = Jinja2Templates(directory="templates/")
+# Authentication is defined via github.Auth
+from github import Auth
 
-app = FastAPI()
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# routers
-# app.include_router(products.router)
-app.include_router(timer.router)
-app.include_router(usuarios.router)
-
-# usuarios = [{"name": "jose", "info": "some shit parks"},
-#             {"name": "fede", "info": "some fede shit"},
-#             {"name": "paula", "info": "some paula shit"}
-#             ]
-
-@app.get("/")
-async def index(request: Request):
-    try:
-        usuarios = await get_users()
-        print("usuarios: ", usuarios)
-        return templates.TemplateResponse("task/index.html", context={"request": request, "usuarios": usuarios})
-    except Exception as e:
-        return templates.TemplateResponse("task/index.html", context={"request": request})
+# using an access token
+# auth = Auth.Token(environ["GHPPT"])
 
 
-# @app.get("/app")
-# async def appme(request: Request):
-#     return templates.TemplateResponse("pro/index.html", context={"request": request})
+# # Public Web Github
+# g = Github(auth=auth).get_user()
+# dnd = g.get_repo("dnd_notes")
+# latest_commit = dnd.get_commits()[0]
+# commit_data = {
+#     'repo': "dnd_notes",
+#     'sha': latest_commit.sha,
+#     # 'author': latest_commit.author.login,
+#     'message': latest_commit.commit.message,
+#     'date': latest_commit.commit.author.date
+# }
 
-# API endpoints
 
-@app.get("/health")
-async def health():
-    return {"ping": 200}
+# print(commit_data)
+
+def get_latest_commits(repo_list, token):
+    auth = Auth.Token(token)
+    g = Github(auth=auth).get_user()
+    commits = []
+
+    for repo_name in repo_list:
+        repo = g.get_repo(repo_name)
+        latest_commit = repo.get_commits()[0]
+        try: 
+            commit_data = {
+              'repo': repo_name,
+              'sha': latest_commit.sha,
+              'author': latest_commit.author.login, 
+              'message': latest_commit.commit.message,
+              'date': latest_commit.commit.author.date.strftime("%B %d, %Y, %H:%M:%S %Z")
+            }
+        except AttributeError:
+            commit_data = {
+              'repo': repo_name,
+              'sha': latest_commit.sha,
+              'author': "not found",
+              'message': latest_commit.commit.message,
+              'date': latest_commit.commit.author.date.strftime("%B %d, %Y, %H:%M:%S %Z")
+            }
+
+
+        commits.append(commit_data)
+
+    return commits
+
+
+repos = [ "django_2024", "dnd_notes"]
+token = environ.get("GHPPT")
+commits = get_latest_commits(repos, token)
+print(commits)
+
+# repos.close()
